@@ -1,0 +1,23 @@
+version: '3'
+
+services:
+  mysql:
+    image: "mysql/mysql-server:5.7"
+    ports:
+      - "32000:3306"
+    environment:
+      - MYSQL_DATABASE=foreign_currency
+      - MYSQL_ROOT_PASSWORD=password
+    restart: always
+    volumes:
+      - ./db:/docker-entrypoint-initdb.d/:ro
+  app:
+    build: .
+    ports:
+      - "5000:5000"
+    env_file: .env 
+    volumes:
+      - .:/code
+    restart: always
+    links:
+      - mysql
